@@ -29,34 +29,6 @@
     setInterval(getData, 3000);
 </script> 
 
-<script type="text/javascript">
-    // 데이터를 가져오고 화면에 표시하는 함수
-    function getUserStatus() {
-        $.ajax({
-            url: '/user',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {   
-{% for host_info in list_host_info %}
-                $('#{{ host_info["NO"] }}-user').text(data.{{ host_info["HOST"]|replace('-','') }});
-                if (data.{{ host_info["HOST"]|replace('-','') }} != 'No connect'){
-                  $('#{{ host_info["NO"] }}-user').css('color','red');
-                }
-                else{                
-                  $('#{{ host_info["NO"] }}-user').css('color','black');
-                }
-{% endfor %}
-            },
-            error: function(xhr, status, error) {
-                console.log('Error:', error);
-            }
-        });
-		alert("Wait a second...check user status")
-    }
-    // 일정 간격으로 데이터 업데이트
-    // setInterval(getUserStatus, 5000);
-</script> 
-
 <script>
 // Only run what comes next *after* the page has loaded
 addEventListener("DOMContentLoaded", function() {
@@ -89,7 +61,7 @@ addEventListener("DOMContentLoaded", function() {
       };
       // We point the request at the appropriate command
       e.currentTarget.setAttribute('disabled', true);
-      alert("Wait 10s... for clicker working");
+      //alert("Wait 10s... for clicker working");
       request.open("GET", "/" + command, true);
       // and then we send it off
       request.send();
@@ -149,51 +121,61 @@ addEventListener("DOMContentLoaded", function() {
    <caption style="font-family: Helvetica, Arial, sans-serif; font-size: 50px; font-weight: bold;"> pyWebClicker </caption>
    <thead>
      <tr>
-      <th>NO</th>
-      <th>HOST</th>
+      <th>NO</th> <!-- 화면에 표시되는 문구 -->
+      <th>HOST</th> 
       <th>IP</th>
-      <th>Id</th>
+      <th>ID</th>
       <th>PW</th>
-      <th>Capacity</th>
-      <th>State</th>
-      <th>
-        <button type="button" class="btn btn-default btn-sm" onclick = "getUserStatus()">
-          <span class="glyphicon glyphicon-refresh"></span> User
-        </button>
-	  </th>
-      <th>Power<br>
-        Off</th>
-      <th>Power<br>
-        On</th>
-      <th>Clicker</th>
+      <th>User</th>
+      <th>PC State</th>
+      <th>PC <br>
+        Power Button</th>
+      <th>PC <br>
+        Hard Power Reset</th>
+      <th>DUT Force<br>
+         Download On</th>
+      <th>DUT Force<br>
+         Download Off</th>
+      <th>PC Commands <br>
+        (Port/High/Low)</th>
+      <th>DUT Commands <br>
+        (Port/High/Low)</th>
      </tr>
    </thead>
    <tbody>
    {% for host_info in list_host_info %}
      <tr>
-      <td style="width: 30px">{{ host_info["NO"] }}</td>
+      <td style="width: 30px">{{ host_info["NO"] }}</td> <!-- Excel에서 가져오는 데이터 -->
       <td>{{ host_info["HOST"] }}</td>
       <td>{{ host_info["IP"] }}</td>
-      <td>{{ host_info["Id"] }}</td>
+      <td>{{ host_info["ID"] }}</td>
       <td>{{ host_info["PW"] }}</td>
-      <td>{{ host_info["Capacity"] }}</td>
+      <td>{{ host_info["User"] }}</td>
       <td>
-        <span id="{{ host_info["NO"] }}-state"></span>        
-      </td>      
-      <td>
-        <span id="{{ host_info["NO"] }}-user"></span>
+        <span id="{{ host_info["NO"] }}-state"></span> <!-- 이것은 추후에 업데이트 될 수 있다 -->
       </td>
       <td>
-      <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__off">
-          Off
-      </button>      
+        <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__Power"> <!-- 버튼 누르면 날아가는 이벤트 이름 -->
+            Power <!-- 버튼에 표시되는 문구 -->
+        </button>      
       </td>
       <td>
-      <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__on">
-          On
-      </button>
+        <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__Hard_Reset">
+            Hard_Reset
+        </button>
       </td>
-      <td>{{ host_info["Clicker"] }}</td>
+      <td>
+        <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__Force_Download_On">
+            On
+        </button>
+      </td>
+       <td>
+        <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__Force_Download_Off">
+            Off
+        </button>
+      </td>
+      <td>{{ host_info["PC Commands (Port/High/Low)"] }}</td>
+      <td>{{ host_info["DUT Commands (Port/High/Low)"] }}</td>
      </tr>
    {% endfor %}
      <tr>

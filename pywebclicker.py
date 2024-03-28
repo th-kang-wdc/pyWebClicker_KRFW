@@ -46,19 +46,23 @@ def get_user():
 @app.route('/<cmd>')
 def command(cmd=None):
     cmd = cmd.split('__') # cmd[0] : host name,  cmd[1] : on or off (via button, __on or __off is attached)
-    response = 'Power on'
     comport = False
-    no = False
     print(cmd)
     for host_info in list_host_info:
         print(host_info['HOST'])
-        if(host_info['HOST'] == cmd[0]): # find matched clicker command
-            comport, no = check_clicker_command(host_info['Clicker'])
+        if(host_info['HOST'] == cmd[0]):
+            if("Force_Download_On" == cmd[1] or "Force_Download_Off" == cmd[1]): # find matched clicker command
+                comport, high_char, low_char = check_clicker_command(host_info['DUT Commands (Port/High/Low)'])
+            elif("Power" == cmd[1] or "Hard_Reset" == cmd[1]): # find matched clicker command
+                comport, high_char, low_char = check_clicker_command(host_info['PC Commands (Port/High/Low)'])
+            else:
+                print(cmd[1], "is not supported")
+                return 'Command is not supported', 200, {'Content-Type': 'text/plain'}
             break
     if (comport is not False):
-        ret = send_serial(com=comport, command=no, poweron=True if cmd[1] == 'on' else False)
+        ret = send_serial(com=comport, command=cmd[1], high_cmd=high_char, low_cmd=low_char)
         if ret is True:
-            return 'Done : {} trigger power {}.'.format(host_info['HOST'], cmd[1]), 200, {'Content-Type': 'text/plain'}
+            return 'Trigger completed: [{}]'.format(cmd[1]), 200, {'Content-Type': 'text/plain'}
         else:
             return 'COM port is not found or used in other SW', 200, {'Content-Type': 'text/plain'}
     else:
