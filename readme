@@ -1,0 +1,31 @@
+Please run "start.bat" in your server machine.
+
+Repository:
+git clone git@github.com:seounghun-chung-wdc/pyWebClicker.git
+
+KR PS Lab server link:
+*Caution* : It is debug site. This ip can be changed. If it is not connected, please contact seoung-hun-chung@wdc.com
+http://10.163.33.47:5000/
+
+For changing clicker configuration, please refer in below example
+
+pywebclicker.csv => clicker configuration file.
+- (Clicker) COM3/1/q -> In server app, "COM3" is parsed by splitting "/". So you shall input "/" for clicker configuration. "1"/"q" is from clicker wire connection setting. 
+For example, clicker first slot use "1" and "q". So COM3/1/q is noted in configuration.
+If clicker is not connected, please use "-". 
+- (HOST) WDKR-PSHOST-01 -> In server app, "ping command" for checking network status use this host name.
+- Other configuration is not used in server side. Plain text is available. 
+
+Example:
+	NO,HOST,IP,Id,PW,Capacity,State,Power Off,Power On,Clicker
+	1,WDKR-PSHOST-01,-,.\intg,tjtls@,512GB,,,,-
+	2,WDKR-PSHOST-03,-,.\intg,tjtls@,1TB,,,,COM3/1/q
+	3,WDKR-PSHOST-04,-,.\intg,tjtls@,512GB,,,,COM3/3/e
+	4,WDKR-PSHOST-05,-,.\intg,tjtls@,2TB,,,,COM3/2/w
+	5,WDKR-PSHOST-06,-,.\intg,tjtls@,4TB,,,,COM3/4/r
+	6,WDKR-PSHOST-08,-,.\intg,tjrtkdals1@#,512GB,,,,COM5/1/q
+	7,WDKR-PSHOST-09,-,.\intg,tjrtkdals1@#,2TB,,,,COM5/3/e
+	8,WDKR-PSHOST-10,-,.\intg,tjrtkdals1@#,1TB,,,,COM5/2/w
+	9,WDKR-PSHOST-11,-,.\intg,tjrtkdals1@#,512GB,,,,-
+	10,WDKR-PSHOST-12,-,.\intg,tjrtkdals1@#,2TB,,,,COM5/4/r
+	

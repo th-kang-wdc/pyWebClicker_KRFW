@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+<script type="text/javascript">
+    // 데이터를 가져오고 화면에 표시하는 함수
+    function getData() {
+        $.ajax({
+            url: '/data',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {   
+{% for host_info in list_host_info %}
+                $('#{{ host_info["NO"] }}-state').text(data.{{ host_info["HOST"]|replace('-','') }});
+                if (data.{{ host_info["HOST"]|replace('-','') }} == 'Error'){
+                  $('#{{ host_info["NO"] }}-state').css('color','red');
+                }
+                else{                
+                  $('#{{ host_info["NO"] }}-state').css('color','black');
+                }
+{% endfor %}
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+    }
+    // 일정 간격으로 데이터 업데이트
+	getData()
+    setInterval(getData, 3000);
+</script> 
+
+<script type="text/javascript">
+    // 데이터를 가져오고 화면에 표시하는 함수
+    function getUserStatus() {
+        $.ajax({
+            url: '/user',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {   
+{% for host_info in list_host_info %}
+                $('#{{ host_info["NO"] }}-user').text(data.{{ host_info["HOST"]|replace('-','') }});
+                if (data.{{ host_info["HOST"]|replace('-','') }} != 'No connect'){
+                  $('#{{ host_info["NO"] }}-user').css('color','red');
+                }
+                else{                
+                  $('#{{ host_info["NO"] }}-user').css('color','black');
+                }
+{% endfor %}
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+		alert("Wait a second...check user status")
+    }
+    // 일정 간격으로 데이터 업데이트
+    // setInterval(getUserStatus, 5000);
+</script> 
+
+<script>
+// Only run what comes next *after* the page has loaded
+addEventListener("DOMContentLoaded", function() {
+  // Grab all of the elements with a class of command
+  // (which all of the buttons we just created have)
+  var commandButtons = document.querySelectorAll(".command");
+  for (var i=0, l=commandButtons.length; i<l; i++) {
+    var button = commandButtons[i];
+    // For each button, listen for the "click" event
+    button.addEventListener("click", function(e) {
+      // When a click happens, stop the button
+      // from submitting our form (if we have one)
+      e.preventDefault();
+
+      var clickedButton = e.target;
+      var command = clickedButton.value;
+
+      // Now we need to send the data to our server
+      // without reloading the page - this is the domain of
+      // AJAX (Asynchronous JavaScript And XML)
+      // We will create a new request object
+      // and set up a handler for the response
+      var request = new XMLHttpRequest();
+      request.extraInfo = e.currentTarget
+      request.onload = function() {
+          // We could do more interesting things with the response
+          // or, we could ignore it entirely
+          request.extraInfo.removeAttribute('disabled');
+          alert(request.responseText);
+      };
+      // We point the request at the appropriate command
+      e.currentTarget.setAttribute('disabled', true);
+      alert("Wait 10s... for clicker working");
+      request.open("GET", "/" + command, true);
+      // and then we send it off
+      request.send();
+    });
+  }
+}, true);
+</script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <title>pyWebClicker</title>
+  <style>
+  p {
+    text-align:left;
+  }
+  li {
+    text-align:left;
+  }
+  table {
+    border-collapse: collapse;
+    margin: 1rem auto;
+    background-color: white;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  
+  /* 테이블 행 */
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #1b1b1b;
+    color: #ddd;
+  }
+  
+  /* 테이블 올렸을 때 */
+  tbody tr:hover {
+    background-color: #d3d3d3;
+    opacity: 0.9;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #fff6f6;
+  }
+  </style>  
+</head>
+<body>
+   <table>
+   <caption style="font-family: Helvetica, Arial, sans-serif; font-size: 50px; font-weight: bold;"> pyWebClicker </caption>
+   <thead>
+     <tr>
+      <th>NO</th>
+      <th>HOST</th>
+      <th>IP</th>
+      <th>Id</th>
+      <th>PW</th>
+      <th>Capacity</th>
+      <th>State</th>
+      <th>
+        <button type="button" class="btn btn-default btn-sm" onclick = "getUserStatus()">
+          <span class="glyphicon glyphicon-refresh"></span> User
+        </button>
+	  </th>
+      <th>Power<br>
+        Off</th>
+      <th>Power<br>
+        On</th>
+      <th>Clicker</th>
+     </tr>
+   </thead>
+   <tbody>
+   {% for host_info in list_host_info %}
+     <tr>
+      <td style="width: 30px">{{ host_info["NO"] }}</td>
+      <td>{{ host_info["HOST"] }}</td>
+      <td>{{ host_info["IP"] }}</td>
+      <td>{{ host_info["Id"] }}</td>
+      <td>{{ host_info["PW"] }}</td>
+      <td>{{ host_info["Capacity"] }}</td>
+      <td>
+        <span id="{{ host_info["NO"] }}-state"></span>        
+      </td>      
+      <td>
+        <span id="{{ host_info["NO"] }}-user"></span>
+      </td>
+      <td>
+      <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__off">
+          Off
+      </button>      
+      </td>
+      <td>
+      <button class="command command-{{ host_info["HOST"] }}" value="{{ host_info["HOST"] }}__on">
+          On
+      </button>
+      </td>
+      <td>{{ host_info["Clicker"] }}</td>
+     </tr>
+   {% endfor %}
+     <tr>
+         <td colspan="11">
+         <p ><strong>*Notice*</strong></p>
+         <ul>
+             <li>If you click &#39;on&#39; or &#39;off&#39;, please wait 10s. PC reboot need time.&nbsp;</li>
+             <li><strong>State</strong>
+             <ul>
+                 <li>Active : PC is on</li>
+                 <li>Error : PC is off or hang-up</li>
+             </ul>
+             </li>
+             <li><strong>Server PC</strong>
+             <ul>
+                 <li>host:&nbsp;{{pcname}}</li>
+                 <li>ID : CSSVal</li>
+                 <li>PW : CSS</li>
+             </ul>
+             </li>
+             <li><strong>User</strong>
+             <ul>
+                 <li>If you click, connected IP is updated.</li>
+                 <li>"No connect" means nobody use this VM</li>
+             </ul>
+             </li>			 
+             <li><strong>Repo</strong>:&nbsp;https://github.com/seounghun-chung-wdc/pyWebClicker</li>
+             <li><strong>Contact</strong>: seoung.hun.chung@wdc.com</li>
+         </ul>
+         </td>
+     </tr>   
+   </tbody>
+  </table>
+</body>
+</html>
