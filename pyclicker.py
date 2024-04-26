@@ -121,16 +121,7 @@ async def __get_remot_pc_ping(host):
 
 async def __get_remot_pc_ping_all(host_info=None):
     if host_info is None:
-        host_info = ['WDKR-PSHOST-01'
-                     ,'WDKR-PSHOST-02'
-                     ,'WDKR-PSHOST-03'
-                     ,'WDKR-PSHOST-04'
-                     ,'WDKR-PSHOST-05'
-                     ,'WDKR-PSHOST-06'
-                     ,'WDKR-PSHOST-07'
-                     ,'WDKR-PSHOST-08'
-                     ,'WDKR-PSHOST-09'
-                     ,'WDKR-PSHOST-10']
+        host_info = ['WDKR-NVMe-124']
     async_func_list = []
     for info in host_info:
         async_func_list.append(__get_remot_pc_ping(info))
@@ -171,16 +162,7 @@ async def __get_current_rdp_status(host, user, pw):
 
 async def get_current_rdp_status_all(rdp_info_s=None):
     if rdp_info_s is None:
-        rdp_info_s = [['WDKR-PSHOST-01',r'intg','tjtls@']
-                    ,['WDKR-PSHOST-02',r'intg','tjtls@']
-                    ,['WDKR-PSHOST-03',r'intg','tjtls@']
-                    ,['WDKR-PSHOST-04',r'intg','tjtls@']
-                    ,['WDKR-PSHOST-05',r'intg','tjtls@']
-                    ,['WDKR-PSHOST-06',r'intg','tjrtkdals1@#']
-                    ,['WDKR-PSHOST-07',r'intg','tjrtkdals1@#']
-                    ,['WDKR-PSHOST-08',r'intg','tjrtkdals1@#']
-                    ,['WDKR-PSHOST-09',r'intg','tjrtkdals1@#']
-                    ,['WDKR-PSHOST-10',r'intg','tjrtkdals1@#']]
+        rdp_info_s = [['WDKR-NVMe-124',r'intg','tjrtkdals1@#']]
     async_func_list = []
     for info in rdp_info_s:
         async_func_list.append(__get_current_rdp_status(*info))
