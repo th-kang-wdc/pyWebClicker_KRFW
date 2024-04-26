@@ -1,11 +1,2 @@
 NO,HOST,IP,ID,PW,User,PC State,PC Soft Power Reset,PC Hard Power Reset,DUT Force Download On,DUT Force Download Off,PC Commands (Port/High/Low),DUT Commands (Port/High/Low)
-1,SDKRFWEPM,10.163.33.251,svc-krfwsvc1,Workday1234!,th.kang@wdc.com,,,,,,COM6/3/e,COM6/1/q
-2,SDKRFWEPM-02,-,.\intg,tjtls@,,,,,,,COM3/3/e,COM3/4/r
-3,SDKRFWEPM-03,-,.\intg,tjtls@,,,,,,,,
-4,SDKRFWEPM-04,-,.\intg,tjtls@,,,,,,,,
-5,SDKRFWEPM-05,-,.\intg,tjtls@,,,,,,,,
-6,SDKRFWEPM-06,-,.\intg,tjrtkdals1@#,,,,,,,,
-7,SDKRFWEPM-07,-,.\intg,tjrtkdals1@#,,,,,,,,
-8,SDKRFWEPM-08,-,.\intg,tjrtkdals1@#,,,,,,,,
-9,SDKRFWEPM-09,-,.\intg,tjrtkdals1@#,,,,,,,,
-10,SDKRFWEPM-10,-,.\intg,tjrtkdals1@#,,,,,,,,
+1,WDKR-NVMe-124,10.163.202.124,intg,tjrtkdals1@#,youngchoon.lee@wdc.com,,,,,,COM6/3/e,COM6/1/q
